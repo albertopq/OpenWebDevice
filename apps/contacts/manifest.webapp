@@ -1,0 +1,17 @@
+{
+  "name": "Contacts",
+  "description": "OWD contacts",
+  "developer": {
+    "name": "Telefonica PDI - OWD Team",
+    "url": "http://openwebdevice.com"
+  },
+  "permissions": [
+    "contacts",
+    "power",
+    "mozApps"
+  ],
+  "icons": {
+    "120": "/style/icons/icon.png"
+  }
+}
+
