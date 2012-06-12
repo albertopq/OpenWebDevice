@@ -60,6 +60,6 @@ scale =  (function (){
 window.addEventListener("load", function (e) {
 	scale();
 });
-window.addEventListener("resize", function (e) {
-	scale();
-});
+// window.addEventListener("resize", function (e) {
+// 	scale();
+// });

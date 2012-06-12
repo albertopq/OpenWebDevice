@@ -57,7 +57,7 @@ caption { text-indent: -9999rem; width: 0; height: 0; overflow: hidden; }
 /* Forms */
 form { margin: 0; }
 fieldset { margin: 0; padding: 0; border: none; }
-legend { display: block; padding: 0; margin: 0; font: 1.2rem/1rem System Sans, Sans-serif, Arial; color: #333; }
+legend { padding: 0; display: block; width: 0; height: 0; overflow: hidden; font: 0/0 a; }
 
 button { height: auto; width: auto; overflow: visible; display: inline-block; vertical-align: middle; background: none; border: none; outline: none; font: 1.1rem/1.3rem System Sans, Sans-serif, Helvetica, Arial;
 ; color: #666; white-space: nowrap; cursor: pointer; }
