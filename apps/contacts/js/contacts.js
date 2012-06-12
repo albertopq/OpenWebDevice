@@ -1,18 +1,6 @@
-﻿/*
- *  Module: This library controls the UX for contacts
- *
- *  Product: Open Web Device
- *
- *  Copyright(c) 2012 Telefónica I+D S.A.U.
- *
- *  LICENSE: TBD
- *
- *  @author Cristian Rodriguez (crdlc@tid.es)
- *
- */
+﻿'use strict';
 
-'use strict';
-
+var contactsList;
 var contacts = {};
 contacts.api = navigator.mozContacts;
 
@@ -21,23 +9,115 @@ if (!contacts.app) {
   contacts.app = (function() {
 
     var init = function contacts_init() {
-      console.log("Init contacts");
+      contactsList = document.getElementById('contacts-list');
+      loadContacts();
     }
 
-    return {
-      'init': init
+    var loadContacts = function loadContacts(mode) {
+      getContactsByGroup(function(contacts) {
+        for (var group in contacts) {
+          iterateOverGroup(group, contacts[group], mode);
+        }
+      }, function() {
+        console.log('ERROR Retrieving contacts');
+      });
     }
-          // 
+
+    var iterateOverGroup = function iterateOverGroup(group, contacts, mode) {
+
+      // Group header
+      var groupEntry = buildGroupHeader(group);
+      contactsList.appendChild(groupEntry);
+      var currentGroup = document.getElementById('group-' + group);
+      // Group of contacts
+      for (var i = 0; i < contacts.length; i++) {
+        currentGroup.appendChild(buildContact(contacts[i], group));
+      }
+    }
+
+    var getContactsByGroup = function(successCb, errorCb) {
+      // contacts.api.find({}, function(contacts) {
+        // var result = {};
+        // for (var i = 0; i < contacts.length; i++) {
+        //   var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
+        //   if (!result.hasOwnProperty(letter)) {
+        //     result[letter] = [];
+        //   }
+        //   result[letter].push(contacts[i]);
+        // }
+        //  successCb(result);
+        // });
+        
+        // Mocking contacts retrievement so far
+        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto"},
+                           {name:"Test", familyName: "Aaa", givenName: "aaa"}],
+                      D: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+                      F: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+                      H: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+                      };
+        successCb(result);
+    };
+
+    var buildContact = function(contact, group) {
+
+      var contactElement = document.createElement('li');
+      contactElement.className = 'blck-item';
+      contactElement.dataset.group = group;
+
+      var linkElem = document.createElement('a');
+      linkElem.className = 'item';
+      contactElement.appendChild(linkElem);
+      
+      // if img add
+      // var figureElem
+      var infoContainer = document.createElement('p');
+      infoContainer.className = 'itm-body';
+      var name = document.createElement('strong');
+      name.className = 'blck-name';
+      name.innerHTML = contact.givenName + ' <b>' + contact.familyName + '</b>';
+      var cat = document.createElement('em');
+      cat.className = 'blck-category';
+
+      infoContainer.appendChild(name);
+      infoContainer.appendChild(cat);
+      linkElem.appendChild(infoContainer);
+      
+      return contactElement;
+    };
+    
+    var buildGroupHeader = function(content) {
+      var headerElem = document.createElement('li');
+      headerElem.innerHTML = '<h2 class="blck-title"><abbr>' + content + '</abbr></h2>';
+      var groupContainer = document.createElement('ol');
+      groupContainer.id = 'group-'+content;
+      headerElem.appendChild(groupContainer);
+      return headerElem;
+    };
+    
+    var buildFavourites = function() {
+      
+    };
+
+    return {
+      'init': init,
+      'build': buildGroupHeader
+    }
+          //
           //     const LIST_CARD_ID = 'listCard';
           //     const DETAILS_CARD_ID = 'detailsCard';
-          // 
+          //
           //     var cPicture = document.querySelector('#cPicture');
           //     var cName = document.querySelector('#cName');
           //     var editContact = document.querySelector('#editContact');
-          //     var cDetails = document.querySelector('.cDetails');    
+          //     var cDetails = document.querySelector('.cDetails');
           //     var listCard = document.querySelector('#' + LIST_CARD_ID);
           //     var detailsCard = document.querySelector('#' + DETAILS_CARD_ID);
-          // 
+          //
           //     var contactsList = document.querySelector('#contactsList');
           //     var lcontacts = document.querySelector('.lcontacts');
           //     var alphaScrollBar = document.querySelector('.alphaScrollBar');
@@ -45,7 +125,7 @@ if (!contacts.app) {
           //     var updateListContacts = false;
           //     var fromNewContactIntent = false;
           //     var photoFileName = undefined;
-          // 
+          //
           //     const touchstart = 'mousedown';
           //     const touchmove = 'mousemove';
           //     const dataStateAttr = 'data-state';
@@ -54,7 +134,7 @@ if (!contacts.app) {
           //     const seletorPrefix = '.entry_';
           //     var readonly = 'readonly';
           //     var firstLetter =  alphaScrollBar.getElementsByTagName('li')[0];
-          // 
+          //
           //     var scrollHandler = {
           //       touchState: { currentLetter: undefined, currentButton: firstLetter },
           //       start: function th_start() {
@@ -95,7 +175,7 @@ if (!contacts.app) {
           //         }
           //       }
           //     }
-          // 
+          //
           //     function doTemplate(data, mode) {
           //       data.photo = PHOTO_PATH + data.photo;
           //       var newElem = owd.templates.addTemplate(contactsList,data);
@@ -113,29 +193,9 @@ if (!contacts.app) {
           //         }
           //       });
           //     }
-          // 
-          //     function iterateOverGroup(letter, contacts, mode) {
-          //       // Letter header
-          //       var groupEntry = owd.ui.createElement({ element : 'li', clazz: 'groupEntry entry_' + letter, content: letter });
-          //       contactsList.appendChild (groupEntry);
-          //       // Group of contacts
-          //       for(var i=0;i<contacts.length;i++) {
-          //         doTemplate (contacts[i], mode);
-          // }
-          //     }
-          // 
-          //     function loadContacts(mode) {
-          //       contactsList.innerHTML = ''; // Reset list of contacts in the first card
-          //       contactsList.appendChild(template);
-          // owd.contacts.api.getContactsByGroup(function(contacts) {
-          //  for(var group in contacts) {
-          //    iterateOverGroup(group, contacts[group], mode);
-          //  }
-          // }, function() {
-          //  console.log("ERRROR Retrieving contacts");
-          // });
-          //     }
-          // 
+          //
+          //
+          //
           //     function open (card) {
           //       if (card === LIST_CARD_ID) {
           //         updateListContacts = false;
@@ -143,9 +203,9 @@ if (!contacts.app) {
           //       }
           //       owd.multiCard.go(card);
           //     }
-          // 
+          //
           //     var nameField = document.querySelector('#name');
-          // 
+          //
           //     var fields = {
           //       'name': nameField,
           //       'familyName': document.querySelector('#familyName'),
@@ -153,9 +213,9 @@ if (!contacts.app) {
           //       'tel': document.querySelector('#tel'),
           //       'email': document.querySelector('#email')
           //     }
-          // 
+          //
           //     var currentContact = {};
-          // 
+          //
           //     function fillDetailsContact(contact) {
           //       currentContact = contact;
           //       for ( var field in fields) {
@@ -177,13 +237,13 @@ if (!contacts.app) {
           //       cPicture.src = PHOTO_PATH + img;
           //       currentContact.photo = img;
           //     }
-          // 
+          //
           //     function updateDetailsContact (id) {
           //       owd.contacts.api.getContactById(id, fillDetailsContact , function() { window.console.error("Error while getting a contact by id: " + id)});
           //     }
-          // 
+          //
           //     var editing = false;
-          // 
+          //
           //     function doToggleEditContact () {
           //       if (editing) {
           //         document.body.dataset.state = '';
@@ -193,7 +253,7 @@ if (!contacts.app) {
           //         for ( var field in fields) {
           //           if (fields.hasOwnProperty(field)) fields[field].setAttribute('readonly', 'readonly');
           //         }
-          //       } else {        
+          //       } else {
           //         document.body.dataset.state = 'edition';
           //         editing = true;
           //         editContact.className = 'accept';
@@ -204,7 +264,7 @@ if (!contacts.app) {
           //         nameField.focus();
           //       }
           //     }
-          // 
+          //
           //     function discardChanges (success) {
           //       var dialog = new owd.messaging.DialogCard('appMain');
           //       var onBackCallback = function() {
@@ -218,7 +278,7 @@ if (!contacts.app) {
           //       ));
           //       dialog.show();
           //     }
-          // 
+          //
           //     function save (contact, doneCB, errorCB) {
           //       if (contact.name && contact.name.length > 0) {
           //         owd.contacts.api.saveContact(contact, function (contact) {
@@ -230,11 +290,11 @@ if (!contacts.app) {
           //         errorCB({emptyFields: ['name']});
           //       }
           //     }
-          // 
+          //
           //     function checkUpdateListCard (origin, target) {
           //       if (origin.name !== target.name || origin.photo !== target.photo) updateListContacts = true;
           //     }
-          // 
+          //
           //     function getContactObject() {
           //       var ret = currentContact;
           //       for ( var field in fields) {
@@ -242,12 +302,12 @@ if (!contacts.app) {
           //           ret[field] = fields[field].value;
           //         }
           //       }
-          // 
+          //
           //       if (photoFileName) ret.photo = photoFileName;
-          // 
+          //
           //       return ret;
           //     }
-          //     
+          //
           //     return {
           //       init: function () {
           //         var mode = owd.common.getParameter('state');
@@ -267,7 +327,7 @@ if (!contacts.app) {
           //           }
           //         }, false);
           //       },
-          // 
+          //
           //       showNewContact: function (number) {
           //         var elem = {photo: UNKNOWN_CONTACT_FILE_NAME};
           //         if (number && fromNewContactIntent) elem.tel = number;
@@ -275,24 +335,24 @@ if (!contacts.app) {
           //         if (!editing) doToggleEditContact();
           //         open (DETAILS_CARD_ID);
           //       },
-          // 
+          //
           //       showDetailsContact: function (id) {
           //         if (editing) doToggleEditContact ();
           //         updateDetailsContact(id);
           //         open (DETAILS_CARD_ID);
           //       },
-          // 
+          //
           //       searchContact: function () {
           //         //TODO
           //       },
-          // 
+          //
           //       editPhoto: function () {
           //         if (editing) {
           //           var intent = owd.intents.intent('Contacts', owd.intents.action.GET_CONTENT, owd.intents.data.IMAGE);
           //           parent.postMessage(intent, '*');
           //         }
           //       },
-          // 
+          //
           //       call: function (evt) {
           //         if (!editing) {
           //           var phoneNumber = evt.target.value;
@@ -300,7 +360,7 @@ if (!contacts.app) {
           //           parent.postMessage(intent, '*');
           //         }
           //       },
-          // 
+          //
           //       onFocus: function (evt) {
           //         if (evt.target.getAttribute('readonly')) {
           //           evt.preventDefault();
@@ -312,7 +372,7 @@ if (!contacts.app) {
           //           }, 200); // 100 ms for displaying keyboard
           //         }
           //       },
-          // 
+          //
           //       onnameChange: function (evt) {
           //         var target = evt.target;
           //         var name = target.value;
@@ -323,7 +383,7 @@ if (!contacts.app) {
           //           target.setAttribute (dataStateAttr, 'error');
           //         }
           //       },
-          // 
+          //
           //       toggleEditContact: function () {
           //         if (editing) {
           //           // Saving changes
@@ -350,7 +410,7 @@ if (!contacts.app) {
           //           doToggleEditContact();
           //         }
           //       },
-          // 
+          //
           //       prev : function (success) {
           //         if (owd.multiCard.current().id !== LIST_CARD_ID) {
           //           if (updateListContacts) loadContacts();
