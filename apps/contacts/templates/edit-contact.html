@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html manifest="manifest.appcache">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="pragma" content="no-cache">
+		<title>Contacts List</title>
+
+		<!-- BOOTZILLA -->
+		<link rel="stylesheet" type="text/css" href="/bootzilla/css/package.css">
+		<script type="text/javascript" src="/bootzilla/js/responsive.js"></script>
+
+		<!-- CONTACTS -->
+		<link rel="stylesheet" type="text/css" href="style/contacts.css">
+
+
+		<script>
+			var host = document.location.host;
+			var domain = host.replace(/(^[\w\d]+\.)?([\w\d]+\.[a-z]+)/, '$2');
+			var src = 'http://' + domain + '/webapi.js';
+			document.write('<script src="' + src + '"><\/script>');
+		</script>
+
+	</head>
+	<body class="app-contacts">
+		<section class="view view-edit-contact">
+			<header class="vw-header">
+				<ul class="pull-right stack vw-actions">
+					<li><a href="#" title="Finish edition"><i class="i-finish">Finish</i></a></li>
+				</ul>
+				<p class="vw-back pull-left"><a href="#" title="Back"><i class="i-back">Back</i></a></p>
+				<h1>Edit contact</h1>
+			</header>
+
+			<article class="vw-body">
+				<div class="vw-bdy-inner">
+					<form action="#" class="fill-flow">
+						<fieldset class="item">
+							<legend>Main information</legend>
+							<a href="#" class="itm-media ff-media">
+								<img src="dummy/88x83.jpg" alt="Mark Afeinto">
+							</a>
+							<div class="itm-body-exp">
+								<p class="ff-row">
+									<label class="hide" for="user_name">Name:</label>
+									<input class="textfield" type="text" value="Mark" id="user_name">
+								</p>
+
+								<p class="ff-row">
+									<label class="hide" for="user_lastname">Last name:</label>
+									<input class="textfield" type="text" value="Afeinto" id="user_lastname">
+								</p>
+							</div>
+						</fieldset>
+
+						<fieldset class="ff-row ff-collapse">
+							<legend class="ff-clp-title"><a href="#">Company <i class="i-arrow i-arw-bottom ff-clp-icon">Expand</i></a></legend>
+							<div class="ff-clp-body">
+								<p class="ff-clp-item">
+									<label class="hide" for="user_company">Company name:</label>
+									<input class="textfield" type="text" value="Telefónica Digital" id="user_company">
+								</p>
+							</div>
+						</fieldset>
+
+						<div class="ff-row">
+							<dl class="ff-collapse expanded">
+								<dt class="ff-clp-title"><a href="#">Home (Default) <i class="i-arrow i-arw-bottom ff-clp-icon">Expand</i></a></dt>
+								<dd class="ff-clp-body">
+									<p class="ff-clp-item">
+										<label class="hide" for="phone_home_number">Phone number:</label>
+										<input class="textfield" type="number" value="34 607 477 497" id="phone_home_number">
+									</p>
+									<p class="ff-clp-item">
+										<label class="hide" for="phone_home_name">Name:</label>
+										<input class="textfield" type="text" value="Telefónica" id="phone_home_name">
+									</p>
+								</dd>
+							</dl>
+						</div>
+
+						<button class="ff-row action">
+							<i class="i-add"></i>
+							Add phone number
+						</button>
+					
+					</form>
+				</div>
+			</article>
+
+			<nav class="vw-nav">
+				<ul class="g-4">
+					<li><a href="#" title="Log"><i class="i-log">Communications Log</i></a></li>
+					<li><a href="#" title="Contacts"><i class="i-contacts">Contacts</i></a></li>
+					<li><a href="#" title="Messages"><i class="i-messages">Messages</i></a></li>
+					<li><a href="#" title="Apps"><i class="i-grid">Apps</i></a></li>
+				</ul>
+			</nav>
+		</section>
+	</body>
+</html>

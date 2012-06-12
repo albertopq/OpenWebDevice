@@ -1,0 +1,44 @@
+/**
+ * ICONS.CSS
+ * Icons provided by the system, could be bitmaps, fonts, or svg
+ * ------------------------------------------------------*/
+
+ 
+i {
+	display: inline-block;
+	vertical-align: middle;
+	width: 2.8rem;
+	height: 2.8rem;
+	font: 0/0 a;
+	background-size: 100% auto;
+}
+
+/* Title bar */
+.i-back 				{ background-color: rgba(0, 0, 0, 0.5); height: 4.8rem; }
+.i-add 					{ background-color: rgba(0, 0, 0, 0.5); }
+.i-finish 				{ background-color: rgba(0, 0, 0, 0.5); }
+.i-favourite 			{ background-color: rgba(0, 0, 0, 0.5); }
+
+
+/* Buttons */
+.i-add { background-color: rgba(255, 255, 255, 0.5);  }
+
+
+/* View Jumper */
+.i-search 				{ background-color: rgba(0, 0, 0, 0.5); }
+
+
+/* Arrows */
+.i-arrow {
+	border: solid 0.4rem transparent;
+	width: 0;
+	height: 0;
+}
+.i-arrow.i-arw-bottom { margin-top: 0.4rem; border-top-color: #333; }
+
+
+/* Bottom nav */
+.i-log 					{ background-color: rgba(255, 255, 255, 0.5); }
+.i-contacts 			{ background-color: rgba(255, 255, 255, 0.5); }
+.i-messages 			{ background-color: rgba(255, 255, 255, 0.5); }
+.i-grid 					{ background-color: rgba(255, 255, 255, 0.5); }
