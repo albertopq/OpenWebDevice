@@ -41,7 +41,7 @@
 
 
 /* ITEMS-LIST: vertical elements list*/
-.block-list {  }
+.block-list { padding-left: 1rem; }
 	.blck-item { border-bottom: solid 1px #dbdbdb; min-height: 6rem; }
 	.blck-item:last-child { border-bottom: none; }
 

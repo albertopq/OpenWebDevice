@@ -1,0 +1,15 @@
+/**
+ * PROFILE.CSS
+ * Specific styles for the contacts app
+ *
+ * APP NAMESPACE:
+ * 	.app-contacts
+ *
+ * 	VIEWS:
+ * 		.view-contacts-list
+ * 		.view-edit-contact
+ * 		.view-contact-profile
+ * ------------------------------------------------------*/
+
+
+ .view-contact-profile .vw-bdy-inner { padding: 0; }
