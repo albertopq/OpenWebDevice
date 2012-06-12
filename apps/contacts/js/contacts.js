@@ -49,14 +49,14 @@ if (!contacts.app) {
         // });
         
         // Mocking contacts retrievement so far
-        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto"},
+        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto", photo: 'templates/dummy/60x60.jpg'},
                            {name:"Test", familyName: "Aaa", givenName: "aaa"}],
                       D: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
                           {name:"Test", familyName: "Baa", givenName: "aaa"}],
-                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto", photo: 'templates/dummy/60x60.jpg'},
                           {name:"Test", familyName: "Baa", givenName: "aaa"}],
                       F: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+                          {name:"Test", familyName: "Baa", givenName: "aaa", photo: 'templates/dummy/60x60.jpg'}],
                       H: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
                           {name:"Test", familyName: "Baa", givenName: "aaa"}],
                       };
@@ -64,7 +64,7 @@ if (!contacts.app) {
     };
 
     var buildContact = function(contact, group) {
-
+      // TODO: Split en several methods (photo, info)
       var contactElement = document.createElement('li');
       contactElement.className = 'blck-item';
       contactElement.dataset.group = group;
@@ -73,8 +73,13 @@ if (!contacts.app) {
       linkElem.className = 'item';
       contactElement.appendChild(linkElem);
       
-      // if img add
-      // var figureElem
+      if (contact.hasOwnProperty('photo')) {
+        var figureElem = document.createElement('figure');
+        figureElem.className = 'itm-media pull-right blck-media';
+        figureElem.innerHTML = '<img alt="' + contact.name + '" src="' + contact.photo + '">'
+        linkElem.appendChild(figureElem);
+      }
+
       var infoContainer = document.createElement('p');
       infoContainer.className = 'itm-body';
       var name = document.createElement('strong');
