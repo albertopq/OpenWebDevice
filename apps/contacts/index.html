@@ -10,7 +10,7 @@
     <script type="text/javascript" src="bootzilla/js/responsive.js"></script>
   </head>
   <body class="app-contacts">
-    <section class="view view-contacts-list">
+    <section id='view-contacts-list' class="view view-contacts-list">
       <div class="vw-inner">
         <header class="vw-header">
           <ul class="pull-right stack vw-actions">
@@ -56,7 +56,11 @@
             <ol class="block-list" id="contacts-list">
             </ol>
           </div>
-        </div>
-      </article>
+        </article>
+      </div> <!-- vw-inner -->
+    </section>
+
+    <section id='view-contact-details' class="view view-contact-details vw-right">
+    </section>
   </body>
 </html>
