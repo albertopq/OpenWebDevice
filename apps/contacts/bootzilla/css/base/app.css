@@ -22,7 +22,7 @@
 
 /* VIEW */
 .view {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
@@ -34,21 +34,21 @@
 	.vw-inner {
 		width: 100%;
 		height: 100%;
-		display: -moz-box; 
+		display: -moz-box;
 		-moz-box-orient: vertical;
 		overflow: hidden;
 		border-radius: 0.8rem;
 	}
-		
+
 		/* COMMON SET-UP */
-		.vw-header, .vw-nav a { height: 4.8rem; } 
+		.vw-header, .vw-nav a { height: 4.8rem; }
 		.vw-header, .vw-nav {
 			overflow: hidden;
 			position: relative;
 			color: #fff;
 			background-image: -moz-linear-gradient(top, #cc6523, #bb492d);
 		}
-		
+
 
 		/* HEADER */
 		.vw-header {
@@ -58,7 +58,7 @@
 			z-index: 10;
 		}
 			.vw-header a { display: block; padding: 1rem;  }
-			.vw-header h1 { 
+			.vw-header h1 {
 				font: 2.1rem/4.8rem System Sans Light, Sans-serif, Arial;
 				text-align: left;
 				text-overflow: ellipsis;
@@ -66,7 +66,7 @@
 				overflow: hidden;
 				margin-left: 3rem;
 			}
-			
+
 			/* Back button */
 			.vw-back a { padding: 0; }
 
@@ -149,14 +149,3 @@
 				}
 					.vw-jumper a { display: block; padding: 0 0.2rem; color: #333; }
 						.vw-jumper i { width: 1.2rem; height: 1.2rem; }
-
-
-
-
-
-
-
-
-
-
-
