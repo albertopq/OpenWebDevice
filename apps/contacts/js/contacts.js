@@ -1,6 +1,15 @@
 ﻿'use strict';
 
-var contactsListView, contactDetailsView, contactsList, contactName, coverImg;
+var contactsListView,
+    contactDetailsView,
+    contactsList,
+    contactName,
+    coverImg,
+    editButton,
+    editView,
+    editBackButton,
+    detailsBackButton;
+
 var contacts = {};
 contacts.api = navigator.mozContacts;
 
@@ -14,6 +23,24 @@ if (!contacts.app) {
       contactDetailsView = document.getElementById('view-contact-details');
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
+      editButton = document.getElementById('edit-contact-button');
+      editView = document.getElementById('view-edit-contact');
+      editBackButton = document.getElementById('edit-back-button');
+      detailsBackButton = document.getElementById('details-back-button');
+
+      // TMP
+      editBackButton.onclick = function() {
+        goBack(editView, contactDetailsView);
+      };
+      detailsBackButton.onclick = function() {
+        goBack(contactDetailsView, contactsListView);
+      };
+
+      editButton.addEventListener('click', function() {
+        showEdit();
+      });
+      
+      
       loadContacts();
     }
 
@@ -127,6 +154,16 @@ if (!contacts.app) {
       // TODO: Move transitions to a common library
       contactDetailsView.classList.remove('vw-right');
       contactsListView.classList.add('vw-left');
+    };
+    
+    var showEdit = function() {
+      contactDetailsView.classList.add('vw-left');
+      editView.classList.remove('vw-right')
+    };
+    
+    var goBack = function(from, to) {
+      to.classList.remove('vw-left');
+      from.classList.add('vw-right')
     };
 
     return {
