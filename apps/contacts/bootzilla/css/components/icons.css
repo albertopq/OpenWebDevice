@@ -16,6 +16,7 @@ i {
 /* Title bar */
 .i-back 					{ background-color: rgba(0, 0, 0, 0.5); height: 4.8rem; }
 .i-add 						{ background-color: rgba(0, 0, 0, 0.5); }
+.i-edit 						{ background-color: rgba(0, 0, 0, 0.5); }
 .i-finish 					{ background-color: rgba(0, 0, 0, 0.5); }
 .i-favourite 				{ background-color: rgba(0, 0, 0, 0.5); }
 
