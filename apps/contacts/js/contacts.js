@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var contactsListView, contactDetailsView, contactsList;
+var contactsListView, contactDetailsView, contactsList, contactName, coverImg;
 var contacts = {};
 contacts.api = navigator.mozContacts;
 
@@ -12,6 +12,8 @@ if (!contacts.app) {
       contactsListView = document.getElementById('view-contacts-list');
       contactsList = document.getElementById('contacts-list');
       contactDetailsView = document.getElementById('view-contact-details');
+      contactName = document.getElementById('contact-name-title');
+      coverImg = document.getElementById('cover-img');
       loadContacts();
     }
 
@@ -49,23 +51,23 @@ if (!contacts.app) {
         // }
         //  successCb(result);
         // });
-        
+
         // Mocking contacts retrievement so far
-        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto", photo: 'templates/dummy/60x60.jpg'},
-                           {name:"Test", familyName: "Aaa", givenName: "aaa"}],
-                      D: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto", photo: 'templates/dummy/60x60.jpg'},
-                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-                      F: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-                          {name:"Test", familyName: "Baa", givenName: "aaa", photo: 'templates/dummy/60x60.jpg'}],
-                      H: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+        var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto', photo: 'templates/dummy/60x60.jpg'},
+                           {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
+                      D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                      E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto', photo: 'templates/dummy/60x60.jpg'},
+                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                      F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                          {name: 'Test', familyName: 'Baa', givenName: 'aaa', photo: 'templates/dummy/60x60.jpg'}],
+                      H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
                       };
         successCb(result);
     };
-    
-    // 
+
+    //
     // Method that generates HTML markup for the contact
     //
 
@@ -81,11 +83,11 @@ if (!contacts.app) {
       contactElement.addEventListener('click', function() {
         showContactDetails(contact);
       });
-      
+
       if (contact.hasOwnProperty('photo')) {
         var figureElem = document.createElement('figure');
         figureElem.className = 'itm-media pull-right blck-media';
-        figureElem.innerHTML = '<img alt="' + contact.name + '" src="' + contact.photo + '">'
+        figureElem.innerHTML = '<img alt="' + contact.name + '" src="' + contact.photo + '">';
         linkElem.appendChild(figureElem);
       }
 
@@ -100,33 +102,37 @@ if (!contacts.app) {
       infoContainer.appendChild(name);
       infoContainer.appendChild(cat);
       linkElem.appendChild(infoContainer);
-      
+
       return contactElement;
     };
-    
+
     var buildGroupHeader = function(content) {
       var headerElem = document.createElement('li');
       headerElem.innerHTML = '<h2 class="blck-title"><abbr>' + content + '</abbr></h2>';
       var groupContainer = document.createElement('ol');
-      groupContainer.id = 'group-'+content;
+      groupContainer.id = 'group-' + content;
       headerElem.appendChild(groupContainer);
       return headerElem;
     };
-    
+
     var buildFavourites = function() {
-      
+
     };
-    
+
     var showContactDetails = function(contact) {
+      contactName.innerHTML = contact.name;
+      //Default Img so far
+      coverImg.innerHTML = '<img alt="' + contact.name + '" src="templates/dummy/320x75.jpg">';
+
+      // TODO: Move transitions to a common library
       contactDetailsView.classList.remove('vw-right');
-      contactDetailsView.innerHTML = JSON.stringify(contact);
       contactsListView.classList.add('vw-left');
     };
 
     return {
       'init': init,
       'build': buildGroupHeader
-    }
+    };
           //
           //     const LIST_CARD_ID = 'listCard';
           //     const DETAILS_CARD_ID = 'detailsCard';

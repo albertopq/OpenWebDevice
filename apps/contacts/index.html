@@ -8,6 +8,8 @@
     <link rel="resource" type="application/l10n" href="locale/contacts.properties"/>
   </head>
   <body class="app-contacts">
+    
+    <!-- Contacts List Section -->
     <section id='view-contacts-list' class="view view-contacts-list">
       <div class="vw-inner">
         <header class="vw-header">
@@ -58,7 +60,30 @@
       </div> <!-- vw-inner -->
     </section>
 
-    <section id='view-contact-details' class="view view-contact-details vw-right">
+    <!-- Contact Details Section -->
+    <section id='view-contact-details' class="view view-contact-profile vw-right">
+      <div class="vw-inner">
+        <header class="vw-header">
+          <ul class="pull-right stack vw-actions">
+            <li><a href="#" title="Edit contact"><i class="i-add" data-l10n-id="edit">Edit</i></a></li>
+          </ul>
+          <p class="vw-back pull-left"><a title="Back" href="#"><i class="i-back">Back</i></a></p>
+          <h1 id='contact-name-title' data-l10n-id="contacts"></h1>
+        </header>
+        <article class="vw-body">
+          <div class="vw-bdy-inner">
+            <!-- Default img so far, as UX have to define what to do when no image -->
+            <figure id='cover-img'>
+            </figure>
+            <nav class="tabs">
+              <ul class="grid">
+                <li id='info-tab' class="active"><a href="#"><i class="i-profile">Information</i></a></li>
+                <li id='feed-tab'><a href="#"><i class="i-log">Feed</i></a></li>
+              </ul>
+            </nav>
+          </div>
+        </article>
+      </div>
     </section>
     
   <script type="text/javascript" src="js/contacts.js"></script>
