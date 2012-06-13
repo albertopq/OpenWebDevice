@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var contactsList;
+var contactsListView, contactDetailsView, contactsList;
 var contacts = {};
 contacts.api = navigator.mozContacts;
 
@@ -9,7 +9,9 @@ if (!contacts.app) {
   contacts.app = (function() {
 
     var init = function contacts_init() {
+      contactsListView = document.getElementById('view-contacts-list');
       contactsList = document.getElementById('contacts-list');
+      contactDetailsView = document.getElementById('view-contact-details');
       loadContacts();
     }
 
@@ -62,6 +64,10 @@ if (!contacts.app) {
                       };
         successCb(result);
     };
+    
+    // 
+    // Method that generates HTML markup for the contact
+    //
 
     var buildContact = function(contact, group) {
       // TODO: Split en several methods (photo, info)
@@ -72,6 +78,9 @@ if (!contacts.app) {
       var linkElem = document.createElement('a');
       linkElem.className = 'item';
       contactElement.appendChild(linkElem);
+      contactElement.addEventListener('click', function() {
+        showContactDetails(contact);
+      });
       
       if (contact.hasOwnProperty('photo')) {
         var figureElem = document.createElement('figure');
@@ -106,6 +115,12 @@ if (!contacts.app) {
     
     var buildFavourites = function() {
       
+    };
+    
+    var showContactDetails = function(contact) {
+      contactDetailsView.classList.remove('vw-right');
+      contactDetailsView.innerHTML = JSON.stringify(contact);
+      contactsListView.classList.add('vw-left');
     };
 
     return {
