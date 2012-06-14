@@ -1,48 +1,83 @@
 ﻿'use strict';
 
-var contactsListView,
-    contactDetailsView,
-    contactsList,
-    contactName,
-    coverImg,
-    editButton,
-    editView,
-    editBackButton,
-    detailsBackButton;
-
 var contacts = {};
 contacts.api = navigator.mozContacts;
+
+var navigationStack = (function(currentView) {
+  var stack = new Array();
+  var _currentView;
+  var transitions = { 'left-right': { from: 'vw-left', to: 'vw-right'},
+                      'top-bottom': { from: 'vw-bottom', to: 'vw-top'},
+                      'right-left': { from: 'vw-right', to: 'vw-left'},
+                      'bottom-top': { from: 'vw-top', to: 'vw-bottom'},
+                    };
+
+  _currentView = currentView;
+  stack.push({ view: currentView, transition: ''});
+  
+  this.go = function(nextView, transition) {
+    var current = document.getElementById(_currentView);
+    var next = document.getElementById(nextView);
+    console.log("GO CURRENT "+ _currentView +  " TO "+ nextView);
+    current.classList.add(transitions[transition].to);
+    next.classList.remove(transitions[transition].from);
+
+    stack.push({ view: _currentView, transition: transition});
+    _currentView = nextView;
+  };
+  
+  this.back = function() {
+    if (stack.length < 2)
+      return;
+
+    var current = document.getElementById(_currentView);
+    var nextView = stack.pop();
+    var next = document.getElementById(nextView.view);
+    console.log("BACK CURRENT "+ _currentView +  " TO "+ nextView.view);
+    current.classList.add(transitions[nextView.transition].from);
+    next.classList.remove(transitions[nextView.transition].to);
+
+    _currentView = nextView.view;
+  };
+
+});
 
 if (!contacts.app) {
 
   contacts.app = (function() {
+    var contactsListView,
+        contactDetailsView,
+        contactsList,
+        contactName,
+        coverImg,
+        editButton,
+        editView,
+        navigation;
 
     var init = function contacts_init() {
-      contactsListView = document.getElementById('view-contacts-list');
+      contactsListView = 'view-contacts-list';
       contactsList = document.getElementById('contacts-list');
-      contactDetailsView = document.getElementById('view-contact-details');
+      contactDetailsView = 'view-contact-details';
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
       editButton = document.getElementById('edit-contact-button');
-      editView = document.getElementById('view-edit-contact');
-      editBackButton = document.getElementById('edit-back-button');
-      detailsBackButton = document.getElementById('details-back-button');
+      editView = 'view-edit-contact';
+      
+      navigation = new navigationStack('view-contacts-list');
 
-      // TMP
-      editBackButton.onclick = function() {
-        goBack(editView, contactDetailsView);
-      };
-      detailsBackButton.onclick = function() {
-        goBack(contactDetailsView, contactsListView);
-      };
+      var backButtons = document.getElementsByClassName('back-button');
+      for(var i = 0; i < backButtons.length; i++) {
+        backButtons[i].onclick = function() {
+          navigation.back();
+        };
+      }
 
       editButton.addEventListener('click', function() {
         showEdit();
       });
-      
-      
+
       loadContacts();
-    }
+    };
 
     var loadContacts = function loadContacts(mode) {
       getContactsByGroup(function(contacts) {
@@ -52,46 +87,40 @@ if (!contacts.app) {
       }, function() {
         console.log('ERROR Retrieving contacts');
       });
-    }
+    };
 
     var iterateOverGroup = function iterateOverGroup(group, contacts, mode) {
-
       // Group header
       var groupEntry = buildGroupHeader(group);
       contactsList.appendChild(groupEntry);
       var currentGroup = document.getElementById('group-' + group);
       // Group of contacts
       for (var i = 0; i < contacts.length; i++) {
+        JSON.stringify(console.log(contacts[i]));
         currentGroup.appendChild(buildContact(contacts[i], group));
       }
-    }
+    };
 
     var getContactsByGroup = function(successCb, errorCb) {
-      // contacts.api.find({}, function(contacts) {
-        // var result = {};
-        // for (var i = 0; i < contacts.length; i++) {
-        //   var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
-        //   if (!result.hasOwnProperty(letter)) {
-        //     result[letter] = [];
-        //   }
-        //   result[letter].push(contacts[i]);
-        // }
-        //  successCb(result);
-        // });
-
-        // Mocking contacts retrievement so far
-        var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto', photo: 'templates/dummy/60x60.jpg'},
-                           {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
-                      D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-                      E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto', photo: 'templates/dummy/60x60.jpg'},
-                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-                      F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-                          {name: 'Test', familyName: 'Baa', givenName: 'aaa', photo: 'templates/dummy/60x60.jpg'}],
-                      H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-                          {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
-                      };
+      var options = {
+        sortBy: 'familyName',
+        sortOrder: 'ascending'
+      };
+      var request = contacts.api.find(options);
+      request.onsuccess = function findCallback() {
+        var result = {};
+        var contacts = request.result;
+        for (var i = 0; i < contacts.length; i++) {
+          var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
+          if (!result.hasOwnProperty(letter)) {
+            result[letter] = [];
+          }
+          result[letter].push(contacts[i]);
+        }
         successCb(result);
+       };
+       
+       request.onerror = errorCb;
     };
 
     //
@@ -114,7 +143,8 @@ if (!contacts.app) {
       if (contact.hasOwnProperty('photo')) {
         var figureElem = document.createElement('figure');
         figureElem.className = 'itm-media pull-right blck-media';
-        figureElem.innerHTML = '<img alt="' + contact.name + '" src="' + contact.photo + '">';
+        // alt="' + contact.name + '" 
+        figureElem.innerHTML = '<img src="' + contact.photo + '">';
         linkElem.appendChild(figureElem);
       }
 
@@ -150,20 +180,11 @@ if (!contacts.app) {
       contactName.innerHTML = contact.name;
       //Default Img so far
       coverImg.innerHTML = '<img alt="' + contact.name + '" src="templates/dummy/320x75.jpg">';
-
-      // TODO: Move transitions to a common library
-      contactDetailsView.classList.remove('vw-right');
-      contactsListView.classList.add('vw-left');
+      navigation.go(contactDetailsView, 'right-left');
     };
     
     var showEdit = function() {
-      contactDetailsView.classList.add('vw-left');
-      editView.classList.remove('vw-right')
-    };
-    
-    var goBack = function(from, to) {
-      to.classList.remove('vw-left');
-      from.classList.add('vw-right')
+      navigation.go(editView, 'right-left');
     };
 
     return {
