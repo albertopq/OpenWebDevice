@@ -53,6 +53,8 @@ if (!contacts.app) {
         editButton,
         editView,
         navigation;
+        
+    var currentContact = {};
 
     var init = function contacts_init() {
       contactsListView = 'view-contacts-list';
@@ -61,7 +63,7 @@ if (!contacts.app) {
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
       editButton = document.getElementById('edit-contact-button');
-      editView = 'view-edit-contact';
+      editView = 'view-contact-form';
       
       navigation = new navigationStack('view-contacts-list');
 
@@ -96,7 +98,6 @@ if (!contacts.app) {
       var currentGroup = document.getElementById('group-' + group);
       // Group of contacts
       for (var i = 0; i < contacts.length; i++) {
-        JSON.stringify(console.log(contacts[i]));
         currentGroup.appendChild(buildContact(contacts[i], group));
       }
     };
@@ -121,6 +122,19 @@ if (!contacts.app) {
        };
        
        request.onerror = errorCb;
+      // // Mocking contacts retrievement so far
+      //        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto", org: "Telefónica Digital", tel: ['12312123','44543']},
+      //                           {name:"Test", familyName: "Aaa", givenName: "aaa"}],
+      //                      D: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+      //                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+      //                      F: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+      //                      H: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
+      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
+      //                      };
+      //        successCb(result);
     };
 
     //
@@ -137,6 +151,7 @@ if (!contacts.app) {
       linkElem.className = 'item';
       contactElement.appendChild(linkElem);
       contactElement.addEventListener('click', function() {
+        currentContact = contact;
         showContactDetails(contact);
       });
 
@@ -184,9 +199,104 @@ if (!contacts.app) {
     };
     
     var showEdit = function() {
+      buildContactForm(currentContact);
       navigation.go(editView, 'right-left');
     };
+    
+    //********** Contact Form **************//
+    
+    var buildContactForm = function(contact) {
+      buildMainInfo(contact);
+      buildWorkInfo(contact);
+      buildPhones(contact);
+      
+    };
+    
+    // Contact Form: main info
+    var buildMainInfo = function(contact) {
+      var editMainInfo = document.getElementById('contact-form-main-info');
+      var container = document.createElement('div');
+      container.className = 'itm-body-exp';
+      container.appendChild(buildFormRow('Name:', 'givenName', 'text', contact.givenName));
+      container.appendChild(buildFormRow('Lastname:', 'familyName', 'text', contact.familyName));
+      editMainInfo.appendChild(container);
+    };
+    
+    // Contact Form: work
+    var buildWorkInfo = function(contact) {
+      var workInfo = document.getElementById('contact-form-work');
+      var container = document.createElement('dl');
+      container.className = 'setbox';
+      var dtElem = document.createElement('dt');
+      dtElem.className = 'sbox-title';
+      // dtElem.innerHTML = '<select><option value="Company">Company</option></select>';
+      container.appendChild(dtElem);
+      var ddElem = document.createElement('dd');
+      ddElem.className = 'sbox-body';
+      ddElem.appendChild(buildFormRow('Company name:', 'org', 'text', contact.org));
+      container.appendChild(ddElem);
+      workInfo.appendChild(container);
+      workInfo.appendChild(removeFieldIcon());
+    };
+    
+    // Contact Form: phones
+    var buildPhones = function(contact) {
+      var phoneContainer = document.getElementById('contact-form-phones');
+      
+      if (contact.tel) {
+        for(var index in contact.tel) {
+          phoneContainer.appendChild(buildPhoneForm(contact.tel[index]));
+        }
+      }
+      phoneContainer.appendChild(removeFieldIcon());
+    };
 
+    var buildPhoneForm = function(tel) {
+      var container = document.createElement('dl');
+      container.className = 'setbox expanded';
+      var dtElem = document.createElement('dt');
+      dtElem.className = 'sbox-title';
+      // dtElem.innerHTML = '<select><option value="Company">Company</option></select>';
+      container.appendChild(dtElem);
+      var ddElem = document.createElement('dd');
+      ddElem.className = 'sbox-body';
+      ddElem.appendChild(buildFormRow('Phone:', 'tel', 'text', tel));
+      ddElem.appendChild(buildFormRow('Notes:', 'notes', 'text'));
+      container.appendChild(ddElem);
+      return container;
+    };
+    
+    var removeFieldIcon = function() {
+      var delButton = document.createElement('button');
+      delButton.className = 'ff-row-action';
+      var delIcon = document.createElement('i');
+      delIcon.className = 'i-delete';
+      delButton.appendChild(delIcon);
+      return delButton;
+    };
+    
+    var buildFormRow = function(label, id, type, value) {
+      var row = document.createElement('p');
+      row.className = 'ff-row';
+      
+      var labelElem = document.createElement('label');
+      labelElem.className = 'hide';
+      labelElem.for = id;
+      labelElem.innerHTML = label;
+      row.appendChild(labelElem);
+      
+      var input = document.createElement('input');
+      input.className = 'textfield';
+      input.type = type;
+      if (value)
+        input.value = value;
+      input.id = id;
+      row.appendChild(input);
+      
+      return row;
+    };
+    
+    
     return {
       'init': init,
       'build': buildGroupHeader
