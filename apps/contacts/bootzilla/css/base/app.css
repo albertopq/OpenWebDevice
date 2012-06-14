@@ -107,6 +107,9 @@
 				text-align: left;
 			}
 
+			/* Removes scroll from the view body inner */
+			.vw-noscroll .vw-bdy-inner { right: -1rem;  }
+
 
 		/* NAV */
 		.vw-nav { background: #000; }
@@ -126,10 +129,11 @@
 		/* JUMPER: Goes directly to some point in the scroll; */
 		.vw-jumper {
 			position: absolute;
-			right: 1.4rem;
+			right: 0;
 			top: 0;
 			bottom: 1rem;
 			z-index: 10;
+			padding: 0 0.7rem;
 		}
 			.vw-jumper:active .vw-jmp-inner { background: #999; }
 			.vw-jmp-inner {
