@@ -9,23 +9,23 @@ var navigationStack = (function(currentView) {
   var transitions = { 'left-right': { from: 'vw-left', to: 'vw-right'},
                       'top-bottom': { from: 'vw-bottom', to: 'vw-top'},
                       'right-left': { from: 'vw-right', to: 'vw-left'},
-                      'bottom-top': { from: 'vw-top', to: 'vw-bottom'},
+                      'bottom-top': { from: 'vw-top', to: 'vw-bottom'}
                     };
 
   _currentView = currentView;
   stack.push({ view: currentView, transition: ''});
-  
+
   this.go = function(nextView, transition) {
     var current = document.getElementById(_currentView);
     var next = document.getElementById(nextView);
-    console.log("GO CURRENT "+ _currentView +  " TO "+ nextView);
+    console.log('GO CURRENT '+ _currentView + ' TO '+ nextView);
     current.classList.add(transitions[transition].to);
     next.classList.remove(transitions[transition].from);
 
     stack.push({ view: _currentView, transition: transition});
     _currentView = nextView;
   };
-  
+
   this.back = function() {
     if (stack.length < 2)
       return;
@@ -33,7 +33,7 @@ var navigationStack = (function(currentView) {
     var current = document.getElementById(_currentView);
     var nextView = stack.pop();
     var next = document.getElementById(nextView.view);
-    console.log("BACK CURRENT "+ _currentView +  " TO "+ nextView.view);
+    console.log('BACK CURRENT '+ _currentView + ' TO '+ nextView.view);
     current.classList.add(transitions[nextView.transition].from);
     next.classList.remove(transitions[nextView.transition].to);
 
@@ -52,10 +52,16 @@ if (!contacts.app) {
         coverImg,
         editButton,
         editView,
-        navigation;
-        
+        navigation,
+        addButton,
+        formTitle,
+        formActions,
+        givenName,
+        familyName;
+
     var currentContact = {};
 
+    // Init selectors
     var init = function contacts_init() {
       contactsListView = 'view-contacts-list';
       contactsList = document.getElementById('contacts-list');
@@ -63,12 +69,17 @@ if (!contacts.app) {
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
       editButton = document.getElementById('edit-contact-button');
+      addButton = document.getElementById('add-contact-button');
       editView = 'view-contact-form';
-      
+      formTitle = document.getElementById('contact-form-title');
+      formActions = document.getElementById('contact-form-actions');
+      givenName = document.getElementById('givenName');
+      familyName = document.getElementById('familyName');
       navigation = new navigationStack('view-contacts-list');
 
+      // Listen Back Button
       var backButtons = document.getElementsByClassName('back-button');
-      for(var i = 0; i < backButtons.length; i++) {
+      for (var i = 0; i < backButtons.length; i++) {
         backButtons[i].onclick = function() {
           navigation.back();
         };
@@ -76,6 +87,10 @@ if (!contacts.app) {
 
       editButton.addEventListener('click', function() {
         showEdit();
+      });
+      
+      addButton.addEventListener('click', function() {
+        showAdd();
       });
 
       loadContacts();
@@ -120,21 +135,23 @@ if (!contacts.app) {
         }
         successCb(result);
        };
-       
+      
        request.onerror = errorCb;
       // // Mocking contacts retrievement so far
-      //        var result = {A: [ {name:"Alberto Pastor", familyName: "Aastor", givenName: "Alberto", org: "Telefónica Digital", tel: ['12312123','44543']},
-      //                           {name:"Test", familyName: "Aaa", givenName: "aaa"}],
-      //                      D: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-      //                      E: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-      //                      F: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-      //                      H: [{name:"Alberto Pastor", familyName: "Bastor", givenName: "Alberto"},
-      //                          {name:"Test", familyName: "Baa", givenName: "aaa"}],
-      //                      };
-      //        successCb(result);
+      //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
+      //                         org: 'Telefónica Digital', tel: ['12312123', '44543'],
+      //                         email: ['test@test.com']},
+      //                       {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
+      //                  D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+      //                  E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+      //                  F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+      //                  H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
+      //                  };
+      //    successCb(result);
     };
 
     //
@@ -142,7 +159,6 @@ if (!contacts.app) {
     //
 
     var buildContact = function(contact, group) {
-      // TODO: Split en several methods (photo, info)
       var contactElement = document.createElement('li');
       contactElement.className = 'blck-item';
       contactElement.dataset.group = group;
@@ -158,7 +174,7 @@ if (!contacts.app) {
       if (contact.hasOwnProperty('photo')) {
         var figureElem = document.createElement('figure');
         figureElem.className = 'itm-media pull-right blck-media';
-        // alt="' + contact.name + '" 
+        // alt="' + contact.name + '"
         figureElem.innerHTML = '<img src="' + contact.photo + '">';
         linkElem.appendChild(figureElem);
       }
@@ -197,34 +213,51 @@ if (!contacts.app) {
       coverImg.innerHTML = '<img alt="' + contact.name + '" src="templates/dummy/320x75.jpg">';
       navigation.go(contactDetailsView, 'right-left');
     };
-    
+
     var showEdit = function() {
+      resetForm();
+      formTitle = 'Edit contact';
+      buildActions([{label: 'Finish', icon: 'i-finish'}]);
       buildContactForm(currentContact);
       navigation.go(editView, 'right-left');
     };
     
+    var showAdd = function() {
+      resetForm();
+      buildActions([
+        { label: 'Cancel', icon: 'i-cancel', callback: navigation.back },
+        { label: 'Finish', icon: 'i-finish', callback: navigation.back}
+      ]);
+      buildContactForm();
+      navigation.go(editView, 'right-left');
+    };
+
     //********** Contact Form **************//
-    
+
     var buildContactForm = function(contact) {
+      contact = contact || {};
       buildMainInfo(contact);
       buildWorkInfo(contact);
       buildPhones(contact);
-      
+      buildEmails(contact);
     };
-    
+
     // Contact Form: main info
     var buildMainInfo = function(contact) {
-      var editMainInfo = document.getElementById('contact-form-main-info');
-      var container = document.createElement('div');
-      container.className = 'itm-body-exp';
-      container.appendChild(buildFormRow('Name:', 'givenName', 'text', contact.givenName));
-      container.appendChild(buildFormRow('Lastname:', 'familyName', 'text', contact.familyName));
-      editMainInfo.appendChild(container);
+      givenName.value = contact.givenName || '';
+      familyName.value = contact.familyName || '';
+      // var editMainInfo = document.getElementById('contact-form-main-info');
+      // var container = document.createElement('div');
+      // container.className = 'itm-body-exp';
+      // container.appendChild(buildFormRow('Name:', 'givenName', 'text', contact.givenName));
+      // container.appendChild(buildFormRow('Lastname:', 'familyName', 'text', contact.familyName));
+      // editMainInfo.appendChild(container);
     };
-    
+
     // Contact Form: work
     var buildWorkInfo = function(contact) {
       var workInfo = document.getElementById('contact-form-work');
+      workInfo.innerHTML = '';
       var container = document.createElement('dl');
       container.className = 'setbox';
       var dtElem = document.createElement('dt');
@@ -238,20 +271,55 @@ if (!contacts.app) {
       workInfo.appendChild(container);
       workInfo.appendChild(removeFieldIcon());
     };
-    
+
     // Contact Form: phones
     var buildPhones = function(contact) {
       var phoneContainer = document.getElementById('contact-form-phones');
-      
+      phoneContainer.innerHTML = '';
+      var fields = [
+        {
+          label: 'Phone:',
+          id: 'tel',
+          type: 'text',
+          value: ''
+        },
+        {
+          label: 'Notes:',
+          id: 'notes',
+          type: 'text'
+        }
+      ];
       if (contact.tel) {
-        for(var index in contact.tel) {
-          phoneContainer.appendChild(buildPhoneForm(contact.tel[index]));
+        for (var index in contact.tel) {
+          fields[0].value = contact.tel[index];
+          phoneContainer.appendChild(buildList(fields));
         }
       }
       phoneContainer.appendChild(removeFieldIcon());
     };
 
-    var buildPhoneForm = function(tel) {
+    // Contact Form: email
+    var buildEmails = function(contact) {
+      var fields = [
+        {
+          label: 'Email:',
+          id: 'email',
+          type: 'email',
+          value: ''
+        }
+      ];
+      var emailContainer = document.getElementById('contact-form-email');
+      emailContainer.innerHTML = '';
+      if (contact.email) {
+        for (var index in contact.email) {
+          fields[0].value = contact.email[index];
+          emailContainer.appendChild(buildList(fields));
+        }
+      }
+      emailContainer.appendChild(removeFieldIcon());
+    }
+
+    var buildList = function(fields) {
       var container = document.createElement('dl');
       container.className = 'setbox expanded';
       var dtElem = document.createElement('dt');
@@ -260,12 +328,34 @@ if (!contacts.app) {
       container.appendChild(dtElem);
       var ddElem = document.createElement('dd');
       ddElem.className = 'sbox-body';
-      ddElem.appendChild(buildFormRow('Phone:', 'tel', 'text', tel));
-      ddElem.appendChild(buildFormRow('Notes:', 'notes', 'text'));
+      for (var f in fields) {
+        ddElem.appendChild(buildFormRow(fields[f].label, fields[f].id, fields[f].type, fields[f].value));
+      }
       container.appendChild(ddElem);
       return container;
     };
     
+    var buildActions = function(actions) {
+      for(var i in actions) {
+        var action = document.createElement('li');
+        action.onclick = actions[i].callback;
+        var link = document.createElement('a');
+        link.title = actions[i].label;
+        var icon = document.createElement('i');
+        icon.className = actions[i].icon;
+        icon.innerHTML = actions[i].label;
+        link.appendChild(icon)
+        action.appendChild(link);
+        formActions.appendChild(action);
+      }
+    };
+    
+    var resetForm = function() {
+      formActions.innerHTML = '';
+      givenName.value = '';
+      familyName.value = '';
+    };
+
     var removeFieldIcon = function() {
       var delButton = document.createElement('button');
       delButton.className = 'ff-row-action';
@@ -274,17 +364,17 @@ if (!contacts.app) {
       delButton.appendChild(delIcon);
       return delButton;
     };
-    
+
     var buildFormRow = function(label, id, type, value) {
       var row = document.createElement('p');
       row.className = 'ff-row';
-      
+
       var labelElem = document.createElement('label');
       labelElem.className = 'hide';
       labelElem.for = id;
       labelElem.innerHTML = label;
       row.appendChild(labelElem);
-      
+
       var input = document.createElement('input');
       input.className = 'textfield';
       input.type = type;
@@ -292,11 +382,11 @@ if (!contacts.app) {
         input.value = value;
       input.id = id;
       row.appendChild(input);
-      
+
       return row;
     };
-    
-    
+
+
     return {
       'init': init,
       'build': buildGroupHeader
