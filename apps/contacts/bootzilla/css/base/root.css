@@ -45,7 +45,7 @@ a abbr { cursor: pointer; }
 
 /* Icons */
 i { font-style: normal; }
-i + strong, i + span { vertical-align: middle; }
+i + b, i + span { vertical-align: middle; }
 
 
 /* Tables */
