@@ -10,6 +10,8 @@
 	display: block;
 	width: 100%;
 	height: 4rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	-moz-box-sizing: border-box;
 	font-size: 1.4rem;
 	color: #333;
