@@ -109,7 +109,7 @@
 			}
 
 			/* Removes scroll from the view body inner */
-			.vw-noscroll .vw-bdy-inner { right: 0;  }
+			.vw-noscroll .vw-bdy-inner { width: -moz-calc(100% + 0.8rem); }
 
 
 		/* NAV */
