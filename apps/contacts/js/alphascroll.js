@@ -12,9 +12,13 @@ if (!contacts.AlphaScroll) {
     var tap = 'mousedown', move = 'mousemove';
     var letterElemType = 'ABBR', prefixGroup = '#group-';
 
+    var currentLetterAbbr = doc.querySelector('.vw-jmp-current > abbr');
+    var currentLetterClassList = doc.querySelector('.vw-jmp-current').classList;
+
     var cas = contacts.AlphaScroll = {
       state: {
-        letter: undefined
+        letter: undefined,
+        timeout: undefined
       },
 
       start: function th_start() {
@@ -28,13 +32,19 @@ if (!contacts.AlphaScroll) {
         var state = this.state;
 
         var currentLetter = evt.target.textContent;
-        
+
         if (evt.target.nodeName === letterElemType &&
             currentLetter && currentLetter !== state.letter) {
           state.letter = currentLetter;
           var groupContainer = doc.querySelector(prefixGroup + currentLetter);
           if (groupContainer) {
+            currentLetterAbbr.textContent = currentLetter;
+            currentLetterClassList.remove("hide");
+            clearTimeout(state.timeout);
             lContacts.scrollTop = groupContainer.previousSibling.offsetTop;
+            state.timeout = setTimeout(function() {
+              currentLetterClassList.add("hide");
+            }, 3000);
           }
         }
       },
