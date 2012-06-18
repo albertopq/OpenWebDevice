@@ -54,8 +54,8 @@ if (!contacts.app) {
         addButton,
         formTitle,
         formActions,
-        givenName,
-        familyName;
+        addPhone,
+        addEmail;
 
     var currentContact = {};
 
@@ -71,8 +71,8 @@ if (!contacts.app) {
       editView = 'view-contact-form';
       formTitle = document.getElementById('contact-form-title');
       formActions = document.getElementById('contact-form-actions');
-      givenName = document.getElementById('givenName');
-      familyName = document.getElementById('familyName');
+      addPhone = document.getElementById('add-phone');
+      addEmail = document.getElementById('add-email');
       navigation = new navigationStack('view-contacts-list');
 
       // Listen Back Button
@@ -134,40 +134,40 @@ if (!contacts.app) {
     }
 
     var getContactsByGroup = function(successCb, errorCb) {
-      var options = {
-        sortBy: 'familyName',
-        sortOrder: 'ascending'
-      };
-      var request = contacts.api.find(options);
-      request.onsuccess = function findCallback() {
-        var result = {};
-        var contacts = request.result;
-        for (var i = 0; i < contacts.length; i++) {
-          var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
-          if (!result.hasOwnProperty(letter)) {
-            result[letter] = [];
-          }
-          result[letter].push(contacts[i]);
-        }
-        successCb(result);
-       };
-
-       request.onerror = errorCb;
-      // // Mocking contacts retrievement so far
-      //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
-      //                         org: 'Telefónica Digital', tel: [{number: '12312123'}, {number: '44543'}],
-      //                         email: ['test@test.com'], photo: 'templates/dummy/320x75.jpg'},
-      //                       {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
-      //                  D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
-      //                  };
-      //    successCb(result);
+      // var options = {
+      //   sortBy: 'familyName',
+      //   sortOrder: 'ascending'
+      // };
+      // var request = contacts.api.find(options);
+      // request.onsuccess = function findCallback() {
+      //   var result = {};
+      //   var contacts = request.result;
+      //   for (var i = 0; i < contacts.length; i++) {
+      //     var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
+      //     if (!result.hasOwnProperty(letter)) {
+      //       result[letter] = [];
+      //     }
+      //     result[letter].push(contacts[i]);
+      //   }
+      //   successCb(result);
+      //  };
+      // 
+      //  request.onerror = errorCb;
+      // Mocking contacts retrievement so far
+         var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
+                              org: 'Telefónica Digital', tel: [{number: '12312123'}, {number: '44543'}],
+                              email: ['test@test.com'], photo: 'templates/dummy/320x75.jpg'},
+                            {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
+                       D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
+                       };
+         successCb(result);
     };
 
     //
@@ -228,7 +228,7 @@ if (!contacts.app) {
 
       var listContainer = document.getElementById('details-list');
       for(var tel in contact.tel) {
-        var telField = {tel: contact.tel[tel].number, tel_tag: '', tel_notes: '', type: 'tel'};
+        var telField = {number: contact.tel[tel].number, tel_type: '', notes: '', type: 'tel'};
         owd.templates.append(listContainer, telField);
       }
       for(var email in contact.email) {
@@ -243,7 +243,16 @@ if (!contacts.app) {
       resetForm();
       formTitle = 'Edit contact';
       buildActions([{label: 'Finish', icon: 'i-finish'}]);
-      buildContactForm(currentContact);
+      var phones = document.getElementById('contacts-form-phones');
+      var emails = document.getElementById('contacts-form-email');
+      for(var tel in currentContact.tel) {
+        var telField = {number: currentContact.tel[tel].number, type: '', notes: ''};
+        phones.appendChild(owd.templates.render(addPhone, telField));
+      }
+      for(var email in currentContact.email) {
+        var emailField = {email: currentContact.email[email], type: ''};
+        emails.appendChild(owd.templates.render(addEmail, emailField));
+      }
       navigation.go(editView, 'right-left');
     };
 
@@ -253,112 +262,16 @@ if (!contacts.app) {
         { label: 'Cancel', icon: 'i-cancel', callback: navigation.back },
         { label: 'Finish', icon: 'i-finish', callback: navigation.back}
       ]);
-      buildContactForm();
+      var phones = document.getElementById('contacts-form-phones');
+      var emails = document.getElementById('contacts-form-email');
+      var telField = {number: '', type: '', notes: ''};
+      phones.appendChild(owd.templates.render(addPhone, telField));
+      var emailField = {email: '', type: ''};
+      emails.appendChild(owd.templates.render(addEmail, emailField));
       navigation.go(editView, 'right-left');
     };
 
     //********** Contact Form **************//
-
-    var buildContactForm = function(contact) {
-      contact = contact || {};
-      buildMainInfo(contact);
-      buildWorkInfo(contact);
-      buildPhones(contact);
-      buildEmails(contact);
-    };
-
-    // Contact Form: main info
-    var buildMainInfo = function(contact) {
-      givenName.value = contact.givenName || '';
-      familyName.value = contact.familyName || '';
-      // var editMainInfo = document.getElementById('contact-form-main-info');
-      // var container = document.createElement('div');
-      // container.className = 'itm-body-exp';
-      // container.appendChild(buildFormRow('Name:', 'givenName', 'text', contact.givenName));
-      // container.appendChild(buildFormRow('Lastname:', 'familyName', 'text', contact.familyName));
-      // editMainInfo.appendChild(container);
-    };
-
-    // Contact Form: work
-    var buildWorkInfo = function(contact) {
-      var workInfo = document.getElementById('contact-form-work');
-      workInfo.innerHTML = '';
-      var container = document.createElement('dl');
-      container.className = 'setbox';
-      var dtElem = document.createElement('dt');
-      dtElem.className = 'sbox-title';
-      // dtElem.innerHTML = '<select><option value="Company">Company</option></select>';
-      container.appendChild(dtElem);
-      var ddElem = document.createElement('dd');
-      ddElem.className = 'sbox-body';
-      ddElem.appendChild(buildFormRow('Company name:', 'org', 'text', contact.org));
-      container.appendChild(ddElem);
-      workInfo.appendChild(container);
-      workInfo.appendChild(removeFieldIcon());
-    };
-
-    // Contact Form: phones
-    var buildPhones = function(contact) {
-      var phoneContainer = document.getElementById('contact-form-phones');
-      phoneContainer.innerHTML = '';
-      var fields = [
-        {
-          label: 'Phone:',
-          id: 'tel',
-          type: 'text',
-          value: ''
-        },
-        {
-          label: 'Notes:',
-          id: 'notes',
-          type: 'text'
-        }
-      ];
-      if (contact.tel) {
-        for (var index in contact.tel) {
-          fields[0].value = contact.tel[index].number;
-          phoneContainer.appendChild(buildList(fields));
-        }
-      }
-      phoneContainer.appendChild(removeFieldIcon());
-    };
-
-    // Contact Form: email
-    var buildEmails = function(contact) {
-      var fields = [
-        {
-          label: 'Email:',
-          id: 'email',
-          type: 'email',
-          value: ''
-        }
-      ];
-      var emailContainer = document.getElementById('contact-form-email');
-      emailContainer.innerHTML = '';
-      if (contact.email) {
-        for (var index in contact.email) {
-          fields[0].value = contact.email[index];
-          emailContainer.appendChild(buildList(fields));
-        }
-      }
-      emailContainer.appendChild(removeFieldIcon());
-    }
-
-    var buildList = function(fields) {
-      var container = document.createElement('dl');
-      container.className = 'setbox expanded';
-      var dtElem = document.createElement('dt');
-      dtElem.className = 'sbox-title';
-      // dtElem.innerHTML = '<select><option value="Company">Company</option></select>';
-      container.appendChild(dtElem);
-      var ddElem = document.createElement('dd');
-      ddElem.className = 'sbox-body';
-      for (var f in fields) {
-        ddElem.appendChild(buildFormRow(fields[f].label, fields[f].id, fields[f].type, fields[f].value));
-      }
-      container.appendChild(ddElem);
-      return container;
-    };
 
     var buildActions = function(actions) {
       for(var i in actions) {
@@ -379,6 +292,10 @@ if (!contacts.app) {
       formActions.innerHTML = '';
       givenName.value = '';
       familyName.value = '';
+      var phones = document.getElementById('contacts-form-phones');
+      var emails = document.getElementById('contacts-form-email');
+      phones.innerHTML = '';
+      emails.innerHTML = '';
     };
 
     var removeFieldIcon = function() {
