@@ -7,7 +7,7 @@ if (!contacts.AlphaScroll) {
 
   (function(doc) {
 
-    var alphaScrollBar = doc.querySelector('.vw-jmp-inner');
+    var alphaScrollBar = doc.querySelector('.vw-jumper');
     var lContacts = doc.querySelector('.vw-bdy-inner');
     var tap = 'mousedown', move = 'mousemove';
     var letterElemType = 'ABBR', prefixGroup = '#group-';
@@ -28,7 +28,7 @@ if (!contacts.AlphaScroll) {
         var state = this.state;
 
         var currentLetter = evt.target.textContent;
-
+        
         if (evt.target.nodeName === letterElemType &&
             currentLetter && currentLetter !== state.letter) {
           state.letter = currentLetter;
