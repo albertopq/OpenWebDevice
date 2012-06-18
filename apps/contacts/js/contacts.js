@@ -118,40 +118,40 @@ if (!contacts.app) {
     };
 
     var getContactsByGroup = function(successCb, errorCb) {
-      var options = {
-        sortBy: 'familyName',
-        sortOrder: 'ascending'
-      };
-      var request = contacts.api.find(options);
-      request.onsuccess = function findCallback() {
-        var result = {};
-        var contacts = request.result;
-        for (var i = 0; i < contacts.length; i++) {
-          var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
-          if (!result.hasOwnProperty(letter)) {
-            result[letter] = [];
-          }
-          result[letter].push(contacts[i]);
-        }
-        successCb(result);
-       };
-      
-       request.onerror = errorCb;
-      // // Mocking contacts retrievement so far
-      //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
-      //                         org: 'Telefónica Digital', tel: ['12312123', '44543'],
-      //                         email: ['test@test.com']},
-      //                       {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
-      //                  D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
-      //                  H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
-      //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
-      //                  };
-      //    successCb(result);
+      // var options = {
+      //   sortBy: 'familyName',
+      //   sortOrder: 'ascending'
+      // };
+      // var request = contacts.api.find(options);
+      // request.onsuccess = function findCallback() {
+      //   var result = {};
+      //   var contacts = request.result;
+      //   for (var i = 0; i < contacts.length; i++) {
+      //     var letter = contacts[i].familyName[0].charAt(0).toUpperCase();
+      //     if (!result.hasOwnProperty(letter)) {
+      //       result[letter] = [];
+      //     }
+      //     result[letter].push(contacts[i]);
+      //   }
+      //   successCb(result);
+      //  };
+      // 
+      //  request.onerror = errorCb;
+      // Mocking contacts retrievement so far
+         var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
+                              org: 'Telefónica Digital', tel: ['12312123', '44543'],
+                              email: ['test@test.com']},
+                            {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
+                       D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       E: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       F: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
+                       H: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
+                           {name: 'Test', familyName: 'Baa', givenName: 'aaa'}]
+                       };
+         successCb(result);
     };
 
     //
