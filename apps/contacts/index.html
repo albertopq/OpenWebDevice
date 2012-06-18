@@ -63,19 +63,18 @@
     <!-- Contact Details Section -->
     <section id='view-contact-details' class="view view-contact-profile vw-right">
       <div class="vw-inner">
-        <header class="vw-header">
+        <header id='details-view-header' class="vw-header">
           <ul class="pull-right stack vw-actions">
             <li id='edit-contact-button'><a href="#" title="Edit contact"><i class="i-add" data-l10n-id="edit">Edit</i></a></li>
           </ul>
           <p class="vw-back pull-left"><a class='back-button' title="Back" href="#"><i class="i-back">Back</i></a></p>
-          <h1 id='contact-name-title' data-l10n-id="contacts"></h1>
+          <h1 id='contact-name-title' data-template data-l10n-id="contacts">#name#</h1>
         </header>
         <article class="vw-body">
           <div class="vw-bdy-inner">
             <div class="appcnts-profile-head">
               <!-- Default img so far, as UX have to define what to do when no image -->
-              <figure id='cover-img'>
-              </figure>
+              <figure	id='cover-img'><img data-template src="#photo#" alt=""></figure>
               <nav class="tabs">
                 <ul class="grid">
                   <li id='info-tab' class="active"><a href="#"><i class="i-profile">Information</i></a></li>
@@ -84,10 +83,13 @@
               </nav>
             </div>
             <section class="appcnts-profile-section">
-              <h1>Telefónica Digital</h1>
-              <ul>
-                <li>
-                  <h2>Mobile</h2>
+              <!-- 
+              We need some UX clarifications before using this field
+              <h1 id='tag_field' data-template>#tag_field#</h1> 
+              -->
+              <ul id='details-list'>
+                <li data-template data-condition= "type === 'tel'">
+                  <h2>#tel_tag#</h2>
                   <div class="item">
                     <div class="itm-media pull-right">
                       <button class="action"><i class="i-message">Message</i></button>
@@ -95,36 +97,25 @@
                     <div class="itm-body-exp">
                       <button class="action">
                         <i class="i-call">Call</i>
-                        <b>+34 607 477 497</b>
-                        <em>Telefónica</em>
+                        <b>#tel#</b>
+                        <em>#tel_notes#</em>
                       </button>
                     </div>
                   </div>
                 </li>
-
-                <li>
-                  <h2>Home</h2>
-                  <div class="item">
-                    <div class="itm-body-exp">
-                      <button class="action">
-                        <i class="i-call">Call</i>
-                        <b>+34 607 477 497</b>
-                      </button>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <h2>Work</h2>
+                
+                <li data-template data-condition= "type === 'email'">
+                  <h2>#email_tag#</h2>
                   <div class="item">
                     <div class="itm-body-exp">
                       <button class="action">
                         <i class="i-email">E-mail</i>
-                        <b>alonso@gmail.com</b>
+                        <b>#email#</b>
                       </button>
                     </div>
                   </div>
                 </li>
+
               </ul>
             </section>
           </div>
@@ -203,6 +194,7 @@
         </article>
       </div>
     </section>
+  <script type="text/javascript" src="js/templates.js"></script>
   <script type="text/javascript" src="js/contacts.js"></script>
   <script type="text/javascript" src="bootzilla/js/responsive.js"></script>
   <script type="text/javascript" src="js/alphascroll.js"></script>

@@ -139,8 +139,8 @@ if (!contacts.app) {
        request.onerror = errorCb;
       // // Mocking contacts retrievement so far
       //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
-      //                         org: 'Telefónica Digital', tel: ['12312123', '44543'],
-      //                         email: ['test@test.com']},
+      //                         org: 'Telefónica Digital', tel: [{number: '12312123'}, {number: '44543'}],
+      //                         email: ['test@test.com'], photo: 'templates/dummy/320x75.jpg'},
       //                       {name: 'Test', familyName: 'Aaa', givenName: 'aaa'}],
       //                  D: [{name: 'Alberto Pastor', familyName: 'Bastor', givenName: 'Alberto'},
       //                      {name: 'Test', familyName: 'Baa', givenName: 'aaa'}],
@@ -209,8 +209,17 @@ if (!contacts.app) {
 
     var showContactDetails = function(contact) {
       contactName.innerHTML = contact.name;
-      //Default Img so far
-      coverImg.innerHTML = '<img alt="' + contact.name + '" src="templates/dummy/320x75.jpg">';
+
+      var listContainer = document.getElementById('details-list');
+      for(var tel in contact.tel) {
+        var telField = {tel: contact.tel[tel].number, tel_tag: '', tel_notes: '', type: 'tel'};
+        owd.templates.append(listContainer, telField);
+      }
+      for(var email in contact.email) {
+        var emailField = {email: contact.email[email], email_tag: '', type: 'email'};
+        owd.templates.append(listContainer, emailField);
+      }
+      owd.templates.append(coverImg, contact);
       navigation.go(contactDetailsView, 'right-left');
     };
 
