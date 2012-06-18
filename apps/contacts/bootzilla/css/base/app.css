@@ -133,7 +133,6 @@
 			top: 0;
 			bottom: 1rem;
 			z-index: 10;
-			padding: 0 0.7rem;
 		}
 			.vw-jumper:active .vw-jmp-inner { background: #999; }
 			.vw-jmp-inner {
@@ -151,5 +150,22 @@
 					text-transform: uppercase;
 					-moz-box-flex: 1;
 				}
-					.vw-jumper a { display: block; padding: 0 0.2rem; color: #333; }
+					.vw-jumper a { display: block; padding: 0 0.7rem; color: #333; }
 						.vw-jumper i { width: 1.2rem; height: 1.2rem; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
