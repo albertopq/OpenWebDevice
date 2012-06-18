@@ -88,7 +88,7 @@ if (!contacts.app) {
       editButton.addEventListener('click', function() {
         showEdit();
       });
-      
+
       addButton.addEventListener('click', function() {
         showAdd();
       });
@@ -117,6 +117,24 @@ if (!contacts.app) {
       }
     };
 
+    var getContactById = function(contactID, successCb, errorCb) {
+      var options = {
+        filterBy: ['id'],
+        filterOp: 'equals',
+        filterValue: contactID
+      };
+
+      var request = contacts.api.find(options);
+      request.onsuccess = function findCallback() {
+        if (request.result.length === 0)
+          errorCb();
+
+        successCb(request.result[0]);
+       };
+
+       request.onerror = errorCb;
+    }
+
     var getContactsByGroup = function(successCb, errorCb) {
       var options = {
         sortBy: 'familyName',
@@ -135,7 +153,7 @@ if (!contacts.app) {
         }
         successCb(result);
        };
-      
+
        request.onerror = errorCb;
       // // Mocking contacts retrievement so far
       //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
@@ -221,7 +239,7 @@ if (!contacts.app) {
       buildContactForm(currentContact);
       navigation.go(editView, 'right-left');
     };
-    
+
     var showAdd = function() {
       resetForm();
       buildActions([
@@ -334,7 +352,7 @@ if (!contacts.app) {
       container.appendChild(ddElem);
       return container;
     };
-    
+
     var buildActions = function(actions) {
       for(var i in actions) {
         var action = document.createElement('li');
@@ -349,7 +367,7 @@ if (!contacts.app) {
         formActions.appendChild(action);
       }
     };
-    
+
     var resetForm = function() {
       formActions.innerHTML = '';
       givenName.value = '';
