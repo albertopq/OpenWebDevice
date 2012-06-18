@@ -35,6 +35,9 @@ i {
 /* View Jumper */
 .i-search 					{ background-color: rgba(0, 0, 0, 0.5); }
 
+/* Selection list */
+.i-selected 				{ background-color: rgba(0, 0, 0, 0.5); }
+
 
 /* Arrows */
 .i-arrow {
