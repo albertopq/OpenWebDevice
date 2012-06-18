@@ -54,25 +54,34 @@ if (!contacts.app) {
         addButton,
         formTitle,
         formActions,
-        addPhone,
-        addEmail;
+        phoneTemplate,
+        emailTemplate,
+        phonesContainer,
+        emailContainer,
+        addPhoneButton,
+        addEmailButton;
 
     var currentContact = {};
 
     // Init selectors
     var init = function contacts_init() {
       contactsListView = 'view-contacts-list';
-      contactsList = document.getElementById('contacts-list');
+      editView = 'view-contact-form';
       contactDetailsView = 'view-contact-details';
+
+      contactsList = document.getElementById('contacts-list');      
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
       editButton = document.getElementById('edit-contact-button');
       addButton = document.getElementById('add-contact-button');
-      editView = 'view-contact-form';
       formTitle = document.getElementById('contact-form-title');
       formActions = document.getElementById('contact-form-actions');
-      addPhone = document.getElementById('add-phone');
-      addEmail = document.getElementById('add-email');
+      phoneTemplate = document.getElementById('add-phone');
+      emailTemplate = document.getElementById('add-email');
+      phonesContainer = document.getElementById('contacts-form-phones');
+      emailContainer = document.getElementById('contacts-form-email');
+      addPhoneButton = document.getElementById('add-new-phone');
+      addEmailButton = document.getElementById('add-new-email');
       navigation = new navigationStack('view-contacts-list');
 
       // Listen Back Button
@@ -83,12 +92,25 @@ if (!contacts.app) {
         };
       }
 
+      // Listen Edit contact Button
       editButton.addEventListener('click', function() {
         showEdit();
       });
 
+      // Listen Add contact Button
       addButton.addEventListener('click', function() {
         showAdd();
+      });
+      
+      // Listen Add phone Button
+      addPhoneButton.addEventListener('click', function() {
+        insertEmptyPhone();
+        return false;
+      });
+      // Listen Add email Button
+      addEmailButton.addEventListener('click', function() {
+        insertEmptyEmail();
+        return false;
       });
 
       loadContacts();
@@ -243,34 +265,39 @@ if (!contacts.app) {
       resetForm();
       formTitle = 'Edit contact';
       buildActions([{label: 'Finish', icon: 'i-finish'}]);
-      var phones = document.getElementById('contacts-form-phones');
-      var emails = document.getElementById('contacts-form-email');
+
       for(var tel in currentContact.tel) {
         var telField = {number: currentContact.tel[tel].number, type: '', notes: ''};
-        phones.appendChild(owd.templates.render(addPhone, telField));
+        phonesContainer.appendChild(owd.templates.render(phoneTemplate, telField));
       }
       for(var email in currentContact.email) {
         var emailField = {email: currentContact.email[email], type: ''};
-        emails.appendChild(owd.templates.render(addEmail, emailField));
+        emailContainer.appendChild(owd.templates.render(emailTemplate, emailField));
       }
       navigation.go(editView, 'right-left');
     };
 
     var showAdd = function() {
       resetForm();
+      insertEmptyPhone();
+      insertEmptyEmail();
       buildActions([
         { label: 'Cancel', icon: 'i-cancel', callback: navigation.back },
         { label: 'Finish', icon: 'i-finish', callback: navigation.back}
       ]);
-      var phones = document.getElementById('contacts-form-phones');
-      var emails = document.getElementById('contacts-form-email');
-      var telField = {number: '', type: '', notes: ''};
-      phones.appendChild(owd.templates.render(addPhone, telField));
-      var emailField = {email: '', type: ''};
-      emails.appendChild(owd.templates.render(addEmail, emailField));
+
       navigation.go(editView, 'right-left');
     };
+    
+    var insertEmptyPhone = function() {
+      var telField = {number: '', type: '', notes: ''};
+      phonesContainer.appendChild(owd.templates.render(phoneTemplate, telField));
+    };
 
+    var insertEmptyEmail = function() {
+      var emailField = {email: '', type: ''};
+      emailContainer.appendChild(owd.templates.render(emailTemplate, emailField));
+    };
     //********** Contact Form **************//
 
     var buildActions = function(actions) {
