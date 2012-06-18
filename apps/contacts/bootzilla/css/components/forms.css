@@ -16,7 +16,7 @@
 
 
 /* SETBOX: used for grouping inputs with data asociations; */
-.setbox { border: solid 1px #c8c8c8; border-radius: 0.3rem; height: 4rem; overflow: hidden; }
+.setbox { border: solid 1px #c8c8c8; border-radius: 0.3rem; overflow: hidden; }
 	.sbox-title {
 		float: left;
 		display: inline;
@@ -51,9 +51,6 @@
 		.sbox-item { border-bottom: solid 1px #ddd; }
 		.sbox-item:last-child { border-bottom: none; }
 			.sbox-body .textfield { border: none; border-radius: 0; margin-bottom: 0; }
-
-/* Expanded state */
-.setbox.expanded { height: auto; border-color: #7a7a7a; }
 
 
 /* FILL FLOW: general components for helping in defining basic flows in forms; */
