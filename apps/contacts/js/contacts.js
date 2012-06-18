@@ -18,7 +18,6 @@ var navigationStack = (function(currentView) {
   this.go = function(nextView, transition) {
     var current = document.getElementById(_currentView);
     var next = document.getElementById(nextView);
-    console.log('GO CURRENT '+ _currentView + ' TO '+ nextView);
     current.classList.add(transitions[transition].to);
     next.classList.remove(transitions[transition].from);
 
@@ -33,7 +32,6 @@ var navigationStack = (function(currentView) {
     var current = document.getElementById(_currentView);
     var nextView = stack.pop();
     var next = document.getElementById(nextView.view);
-    console.log('BACK CURRENT '+ _currentView + ' TO '+ nextView.view);
     current.classList.add(transitions[nextView.transition].from);
     next.classList.remove(transitions[nextView.transition].to);
 
