@@ -72,15 +72,61 @@
         </header>
         <article class="vw-body">
           <div class="vw-bdy-inner">
-            <!-- Default img so far, as UX have to define what to do when no image -->
-            <figure id='cover-img'>
-            </figure>
-            <nav class="tabs">
-              <ul class="grid">
-                <li id='info-tab' class="active"><a href="#"><i class="i-profile">Information</i></a></li>
-                <li id='feed-tab'><a href="#"><i class="i-log">Feed</i></a></li>
+            <div class="appcnts-profile-head">
+              <!-- Default img so far, as UX have to define what to do when no image -->
+              <figure id='cover-img'>
+              </figure>
+              <nav class="tabs">
+                <ul class="grid">
+                  <li id='info-tab' class="active"><a href="#"><i class="i-profile">Information</i></a></li>
+                  <li id='feed-tab'><a href="#"><i class="i-log">Feed</i></a></li>
+                </ul>
+              </nav>
+            </div>
+            <section class="appcnts-profile-section">
+              <h1>Telefónica Digital</h1>
+              <ul>
+                <li>
+                  <h2>Mobile</h2>
+                  <div class="item">
+                    <div class="itm-media pull-right">
+                      <button class="action"><i class="i-message">Message</i></button>
+                    </div>
+                    <div class="itm-body-exp">
+                      <button class="action">
+                        <i class="i-call">Call</i>
+                        <b>+34 607 477 497</b>
+                        <em>Telefónica</em>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <h2>Home</h2>
+                  <div class="item">
+                    <div class="itm-body-exp">
+                      <button class="action">
+                        <i class="i-call">Call</i>
+                        <b>+34 607 477 497</b>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <h2>Work</h2>
+                  <div class="item">
+                    <div class="itm-body-exp">
+                      <button class="action">
+                        <i class="i-email">E-mail</i>
+                        <b>alonso@gmail.com</b>
+                      </button>
+                    </div>
+                  </div>
+                </li>
               </ul>
-            </nav>
+            </section>
           </div>
         </article>
       </div>
@@ -124,7 +170,7 @@
                 <legend>Phone numbers</legend>
               </fieldset>
 
-              <button id='add-phone' class="ff-row action">
+              <button id='add-phone' class="ff-row action act-add">
                 <i class="i-add"></i> Add phone number
               </button>
 
@@ -132,7 +178,7 @@
                 <legend>E-mail address</legend>
               </fieldset>
 
-              <button class="ff-row action">
+              <button class="ff-row action act-add">
                 <i class="i-add"></i> Add email address
               </button>
 
