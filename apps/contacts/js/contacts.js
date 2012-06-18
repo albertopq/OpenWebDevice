@@ -316,7 +316,7 @@ if (!contacts.app) {
       ];
       if (contact.tel) {
         for (var index in contact.tel) {
-          fields[0].value = contact.tel[index];
+          fields[0].value = contact.tel[index].number;
           phoneContainer.appendChild(buildList(fields));
         }
       }
