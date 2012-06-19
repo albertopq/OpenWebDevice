@@ -69,8 +69,6 @@ if (!contacts.app) {
       groupsList = document.getElementById('groups-list');
       editView = 'view-contact-form';
       contactDetailsView = 'view-contact-details';
-
-      contactsList = document.getElementById('contacts-list');
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
       editButton = document.getElementById('edit-contact-button');
