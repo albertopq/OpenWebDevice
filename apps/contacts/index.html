@@ -54,19 +54,19 @@
             </ol>
           </div>
           <div class="vw-bdy-inner">
-            <ol class="block-list" id="contacts-list">
+            <ol class="block-list" id="groups-list">
               <li data-template>
-                <h2 class="blck-title">
-                  <abbr title="Contacts listed #content#">#content#</abbr>
-                </h2
-                <ol>
-                  <li data-template class="blck-item">
+                <h2 id="group-#group#" class="blck-title">
+                  <abbr title="Contacts listed #group#">#group#</abbr>
+                </h2>
+                <ol id="contacts-list">
+                  <li data-template class="blck-item" data-uuid="#id#">
                     <a href="#" class="item">
-                      <figure class="itm-media pull-right blck-media c#contact.photo#">
-                        <img src="#contact.photo#" alt="#contact.givenName#">
+                      <figure class="itm-media pull-right blck-media c-#photo#">
+                        <img src="#photo#" alt="#givenName#">
                       </figure>
                       <p class="itm-body">
-                        <strong class="blck-name">#contact.givenName# <b>#contact.familyName#</b></strong>
+                        <strong class="blck-name">#givenName# <b>#familyName#</b></strong>
                       </p>
                     </a>
                   </li>

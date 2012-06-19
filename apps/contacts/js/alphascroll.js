@@ -41,7 +41,7 @@ if (!contacts.AlphaScroll) {
             currentLetterAbbr.textContent = currentLetter;
             currentLetterClassList.remove("hide");
             clearTimeout(state.timeout);
-            lContacts.scrollTop = groupContainer.previousSibling.offsetTop;
+            lContacts.scrollTop = groupContainer.offsetTop;
             state.timeout = setTimeout(function() {
               currentLetterClassList.add("hide");
             }, 3000);

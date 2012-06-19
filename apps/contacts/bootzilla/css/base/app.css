@@ -126,6 +126,13 @@
 						margin-left: -1px;
 					}
 
+		.c-null {
+			display: none;
+		}
+
+		.blck-item > * {
+			pointer-events: none;
+		}
 
 		/* JUMPER: Goes directly to some point in the scroll; */
 		.vw-jumper {
@@ -165,13 +172,3 @@
 				}
 					.vw-jmp-inner a, .vw-jmp-inner abbr { display: block; color: #333; width: 100%; }
 						.vw-jmp-inner i { width: 1.2rem; height: 1.2rem; }
-
-
-
-
-
-
-
-
-
-

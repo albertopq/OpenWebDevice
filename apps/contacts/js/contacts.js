@@ -45,7 +45,7 @@ if (!contacts.app) {
   contacts.app = (function() {
     var contactsListView,
         contactDetailsView,
-        contactsList,
+        groupsList,
         contactName,
         coverImg,
         editButton,
@@ -62,7 +62,7 @@ if (!contacts.app) {
     // Init selectors
     var init = function contacts_init() {
       contactsListView = 'view-contacts-list';
-      contactsList = document.getElementById('contacts-list');
+      groupsList = document.getElementById('groups-list');
       contactDetailsView = 'view-contact-details';
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
@@ -91,6 +91,16 @@ if (!contacts.app) {
         showAdd();
       });
 
+      groupsList.addEventListener('click', function(evt) {
+        var dataset = evt.target.dataset;
+        if (dataset && 'uuid' in dataset) {
+          getContactById(dataset.uuid, function(contact) {
+            currentContact = contact;
+            showContactDetails(contact);
+          }, function() {});
+        }
+      });
+
       loadContacts();
     };
 
@@ -105,13 +115,12 @@ if (!contacts.app) {
     };
 
     var iterateOverGroup = function iterateOverGroup(group, contacts, mode) {
-      // Group header
-      var groupEntry = buildGroupHeader(group);
-      contactsList.appendChild(groupEntry);
-      var currentGroup = document.getElementById('group-' + group);
-      // Group of contacts
-      for (var i = 0; i < contacts.length; i++) {
-        currentGroup.appendChild(buildContact(contacts[i], group));
+      if (group && group.trim().length > 0 && contacts.length > 0) {
+        var gElem = owd.templates.append(groupsList, {
+          group: group
+        });
+
+        owd.templates.append(gElem.querySelector('#contacts-list'), contacts);
       }
     };
 
@@ -151,7 +160,7 @@ if (!contacts.app) {
         }
         successCb(result);
        };
-      
+
        request.onerror = errorCb;
       // // Mocking contacts retrievement so far
       //    var result = {A: [{name: 'Alberto Pastor', familyName: 'Aastor', givenName: 'Alberto',
@@ -173,51 +182,6 @@ if (!contacts.app) {
     //
     // Method that generates HTML markup for the contact
     //
-
-    var buildContact = function(contact, group) {
-      var contactElement = document.createElement('li');
-      contactElement.className = 'blck-item';
-      contactElement.dataset.group = group;
-
-      var linkElem = document.createElement('a');
-      linkElem.className = 'item';
-      contactElement.appendChild(linkElem);
-      contactElement.addEventListener('click', function() {
-        currentContact = contact;
-        showContactDetails(contact);
-      });
-
-      if (contact.hasOwnProperty('photo')) {
-        var figureElem = document.createElement('figure');
-        figureElem.className = 'itm-media pull-right blck-media';
-        // alt="' + contact.name + '"
-        figureElem.innerHTML = '<img src="' + contact.photo + '">';
-        linkElem.appendChild(figureElem);
-      }
-
-      var infoContainer = document.createElement('p');
-      infoContainer.className = 'itm-body';
-      var name = document.createElement('strong');
-      name.className = 'blck-name';
-      name.innerHTML = contact.givenName + ' <b>' + contact.familyName + '</b>';
-      var cat = document.createElement('em');
-      cat.className = 'blck-category';
-
-      infoContainer.appendChild(name);
-      infoContainer.appendChild(cat);
-      linkElem.appendChild(infoContainer);
-
-      return contactElement;
-    };
-
-    var buildGroupHeader = function(content) {
-      var headerElem = document.createElement('li');
-      headerElem.innerHTML = '<h2 class="blck-title"><abbr>' + content + '</abbr></h2>';
-      var groupContainer = document.createElement('ol');
-      groupContainer.id = 'group-' + content;
-      headerElem.appendChild(groupContainer);
-      return headerElem;
-    };
 
     var buildFavourites = function() {
 
@@ -330,8 +294,7 @@ if (!contacts.app) {
 
 
     return {
-      'init': init,
-      'build': buildGroupHeader
+      'init': init
     };
           //
           //     const LIST_CARD_ID = 'listCard';
@@ -344,7 +307,7 @@ if (!contacts.app) {
           //     var listCard = document.querySelector('#' + LIST_CARD_ID);
           //     var detailsCard = document.querySelector('#' + DETAILS_CARD_ID);
           //
-          //     var contactsList = document.querySelector('#contactsList');
+          //     var groupsList = document.querySelector('#contactsList');
           //     var lcontacts = document.querySelector('.lcontacts');
           //     var alphaScrollBar = document.querySelector('.alphaScrollBar');
           //     var template = document.querySelector('.template');
