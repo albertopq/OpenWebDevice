@@ -7,6 +7,14 @@
     <link href="bootzilla/css/package.css" rel="stylesheet">
     <link href="style/contacts.css" rel="stylesheet">
     <link rel="resource" type="application/l10n" href="locale/contacts.properties"/>
+
+    <script class="events" type="text/xml">
+      <listener observer="#edit-contact-button" event="click" function="contacts.app.ui.showEdit" />
+      <listener observer="#groups-list" event="click" function="contacts.app.ui.showDetails" />
+      <listener observer="#add-contact-button" event="click" function="contacts.app.ui.showAdd" />
+      <listener observer="#add-new-phone" event="click" function="contacts.app.ui.addNewPhone" />
+      <listener observer="#add-new-email" event="click" function="contacts.app.ui.addNewEmail" />
+    </script>
   </head>
   <body class="app-contacts">
 
@@ -270,6 +278,7 @@
         </article>
       </div>
     </section>
+  <script type="text/javascript" src="js/xmlevents.js"></script>
   <script type="text/javascript" src="js/templates.js"></script>
   <script type="text/javascript" src="js/contacts.js"></script>
   <script type="text/javascript" src="bootzilla/js/responsive.js"></script>

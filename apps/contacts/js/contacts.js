@@ -48,18 +48,14 @@ if (!contacts.app) {
         groupsList,
         contactName,
         coverImg,
-        editButton,
         editView,
         navigation,
-        addButton,
         formTitle,
         formActions,
         phoneTemplate,
         emailTemplate,
         phonesContainer,
-        emailContainer,
-        addPhoneButton,
-        addEmailButton;
+        emailContainer;
 
     var currentContact = {};
 
@@ -71,16 +67,12 @@ if (!contacts.app) {
       contactDetailsView = 'view-contact-details';
       contactName = document.getElementById('contact-name-title');
       coverImg = document.getElementById('cover-img');
-      editButton = document.getElementById('edit-contact-button');
-      addButton = document.getElementById('add-contact-button');
       formTitle = document.getElementById('contact-form-title');
       formActions = document.getElementById('contact-form-actions');
       phoneTemplate = document.getElementById('add-phone');
       emailTemplate = document.getElementById('add-email');
       phonesContainer = document.getElementById('contacts-form-phones');
       emailContainer = document.getElementById('contacts-form-email');
-      addPhoneButton = document.getElementById('add-new-phone');
-      addEmailButton = document.getElementById('add-new-email');
       navigation = new navigationStack('view-contacts-list');
 
       // Listen Back Button
@@ -91,39 +83,18 @@ if (!contacts.app) {
         };
       }
 
-      // Listen Edit contact Button
-      editButton.addEventListener('click', function() {
-        showEdit();
-      });
-
-      // Listen Add contact Button
-      addButton.addEventListener('click', function() {
-        showAdd();
-      });
-
-      // Listen Add phone Button
-      addPhoneButton.addEventListener('click', function() {
-        insertEmptyPhone();
-        return false;
-      });
-      // Listen Add email Button
-      addEmailButton.addEventListener('click', function() {
-        insertEmptyEmail();
-        return false;
-      });
-
-      groupsList.addEventListener('click', function(evt) {
-        var dataset = evt.target.dataset;
-        if (dataset && 'uuid' in dataset) {
-          getContactById(dataset.uuid, function(contact) {
-            currentContact = contact;
-            showContactDetails(contact);
-          }, function() {});
-        }
-      });
-
       loadContacts();
     };
+
+    var addNewPhone = function() {
+      insertEmptyPhone();
+      return false;
+    }
+
+    var addNewEmail = function() {
+      insertEmptyEmail();
+      return false;
+    }
 
     var loadContacts = function loadContacts(mode) {
       getContactsByGroup(function(contacts) {
@@ -208,7 +179,7 @@ if (!contacts.app) {
 
     };
 
-    var showContactDetails = function(contact) {
+    var doShowContactDetails = function(contact) {
       contactName.innerHTML = contact.name;
 
       var listContainer = document.getElementById('details-list');
@@ -318,9 +289,25 @@ if (!contacts.app) {
       return row;
     };
 
+    var showContactDetails = function(evt) {
+      var dataset = evt.target.dataset;
+      if (dataset && 'uuid' in dataset) {
+        getContactById(dataset.uuid, function(contact) {
+          currentContact = contact;
+          doShowContactDetails(contact);
+        }, function() {});
+      }
+    }
 
     return {
-      'init': init
+      'init': init,
+      'ui' : {
+        'showDetails': showContactDetails,
+        'showEdit' : showEdit,
+        'showAdd': showAdd,
+        'addNewPhone' : addNewPhone,
+        'addNewEmail' : addNewEmail
+      }
     };
           //
           //     const LIST_CARD_ID = 'listCard';
